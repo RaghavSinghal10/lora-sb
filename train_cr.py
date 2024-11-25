@@ -100,7 +100,7 @@ def finetune():
     eff_lr = args.lr/(args.warmup_ratio * total_training_steps)
 
 
-    named_grads = estimate_and_process_grads_torch_3(
+    named_grads = estimate_and_process_grads_torch(
         model=model,
         dataloader=train_loader,
         lr=eff_lr,

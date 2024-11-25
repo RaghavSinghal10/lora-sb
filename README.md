@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Low-rank adapters have become a standard approach for efficiently fine-tuning large language models (LLMs), but they often fall short of achieving the performance of full fine-tuning. We propose a method, **LoRA Silver Bullet** or **LoRA-SB**, that approximates full fine-tuning within low-rank subspaces using a carefully designed initialization strategy. We theoretically demonstrate that the architecture of LoRA-XS —w hich inserts a trainable rxr matrix between B and A while keeping other matrices fixed — provides the precise conditions needed for this approximation. We leverage its constrained update space to achieve optimal scaling for high-rank gradient updates while removing the need for hyperparameter tuning. We prove that our initialization offers an optimal low-rank approximation of the initial gradient and preserves update directions throughout training. Extensive experiments across mathematical reasoning, commonsense reasoning, and language understanding tasks demonstrate that our approach exceeds the performance of standard LoRA while using **27-90x** fewer parameters, and comprehensively outperforms LoRA-XS. Our findings establish that it is possible to simulate full fine-tuning in low-rank subspaces, and achieve significant efficiency gains without sacrificing performance.
+Low-rank adapters have become a standard approach for efficiently fine-tuning large language models (LLMs), but they often fall short of achieving the performance of full fine-tuning. We propose a method, **LoRA Silver Bullet** or **LoRA-SB**, that approximates full fine-tuning within low-rank subspaces using a carefully designed initialization strategy. We theoretically demonstrate that the architecture of LoRA-XS — which inserts a trainable rxr matrix between B and A while keeping other matrices fixed — provides the precise conditions needed for this approximation. We leverage its constrained update space to achieve optimal scaling for high-rank gradient updates while removing the need for hyperparameter tuning. We prove that our initialization offers an optimal low-rank approximation of the initial gradient and preserves update directions throughout training. Extensive experiments across mathematical reasoning, commonsense reasoning, and language understanding tasks demonstrate that our approach exceeds the performance of standard LoRA while using **27-90x** fewer parameters, and comprehensively outperforms LoRA-XS. Our findings establish that it is possible to simulate full fine-tuning in low-rank subspaces, and achieve significant efficiency gains without sacrificing performance.
 
 
 ## Environment
@@ -12,6 +12,67 @@ We recommend using a Conda environment to run the Python scripts for this projec
 ```
 conda create -n lora-sb python=3.10
 pip install -r requirements.txt
+```
+
+## Quickstart
+
+LoRA-SB is built on top of HuggingFace Transformers and PEFT libraries, making it incredibly easy to use. The following example demonstrates the minimal changes required to fine-tune a model using LoRA-SB.
+
+```bash
+from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM
+from utils.initialization_utils import find_and_initialize  # used to transform LoRA to LoRA-XS style architecture
+from utils.gradient utils import estimate_and_process_grads_torch
+
+model = AutoModelForCausalLM.from_pretrained(
+        model_name, 
+        device_map="auto",
+        torch_dtype = torch.bfloat16
+    ) 
+
+# estimate update approximation for initialization
+named_grads = estimate_and_process_grads_torch(
+        model=model,
+        dataloader=train_loader,
+        num_samples=50,
+    )
+
+# set up a peft config
+peft_config = LoraConfig(
+        r=lora_rank,
+        target_modules=lora_target_modules,
+        task_type="CAUSAL_LM", # assuming a decoder-only model
+    )
+
+# convert model to peft model
+model = get_peft_model(model, peft_config)
+
+with open("config/reconstruct_config.yaml", 'r') as stream:
+    reconstr_config = yaml.load(stream, Loader=yaml.FullLoader)
+    
+adapter_name = "default"  # assuming a single LoRA adapter per module to be transformed to LoRA-SB
+peft_config_dict = {adapter_name: lora_config}
+
+# specifying LoRA rank for the SVD initialization
+reconstr_config['svd']['rank'] = lora_rank
+    
+named_grads_new = {f'base_model.model.{k}': v for k, v in named_grads.items()}
+
+# convert to LoRA-SB model
+find_and_initialize_grad(
+    model=model,
+    peft_config=peft_config_dict,
+    adapter_name=adapter_name,
+    reconstr_type='svd',
+    reconstruct_config=reconstr_config,
+    writer=None,
+    named_grads=named_grads_new,
+)
+
+# perform training as usual
+
+# You can merge LoRA-SB into the base model using `merge_and_unload` in PEFT
+model = model.merge_and_unload() 
 ```
 
 ## Arithmetic Reasoning
@@ -50,11 +111,3 @@ bash scripts/run_glue.sh
 ```
 
 This script fine-tunes a RoBERTa-large model on the GLUE benchmark datasets. You can adjust the ``TASKS`` parameter to target different datasets as needed.
-
-## Citation
-
-If you use our work for your research, please cite our paper:
-
-```
-
-```
