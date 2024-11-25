@@ -97,11 +97,11 @@ def finetune():
     eff_lr = args.lr/(args.warmup_ratio * total_training_steps)
 
 
-    named_grads = estimate_and_process_grads_torch_2(
+    named_grads = estimate_and_process_grads_torch_3(
         model=model,
         dataloader=train_loader,
         lr=eff_lr,
-        num_samples=2,
+        num_samples=50,
     )
 
     # Create peft model
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     parser.add_argument("--lora_alpha", type=int, default=96, help="LoRA alpha value")
     parser.add_argument("--lora_dropout", type=float, default=0, help="LoRA dropout value")
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size")
-    parser.add_argument("--eg_bs", type=int, default=10, help="Batch size for gradient estimation")
+    parser.add_argument("--eg_bs", type=int, default=3, help="Batch size for gradient estimation")
     parser.add_argument("--epochs", type=int, default=1, help="Number of epochs")
     parser.add_argument("--scheduler", type=str, default="cosine", help="Learning rate scheduler")
     parser.add_argument("--warmup_ratio", type=float, default=0.02, help="Warmup ratio")

@@ -2,7 +2,7 @@
 
 # Configuration
 BASE_MODEL="meta-llama/Llama-3.2-3B"
-LORA_R=32
+LORA_R=96
 GPU_ID=0  # Specify which GPU to use
 
 # Base directory for experiments

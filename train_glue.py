@@ -31,7 +31,7 @@ parser = argparse.ArgumentParser(description="GLUE fine-tuning with LoRA SB")
 
 parser.add_argument("--task", type=str, default="cola", help="GLUE task to fine-tune on")
 parser.add_argument("--model", type=str, default="roberta-large", help="Model name")
-parser.add_argument("--lora_r", type=int, default=4, help="LoRA R value")
+parser.add_argument("--lora_r", type=int, default=24, help="LoRA R value")
 parser.add_argument("--lora_alpha", type=int, default=16, help="LoRA alpha value")
 parser.add_argument("--lora_dropout", type=float, default=0, help="LoRA dropout value")
 parser.add_argument("--batch_size", type=int, default=128, help="Batch size")

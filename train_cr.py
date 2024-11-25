@@ -47,7 +47,7 @@ def create_run_directory(args):
     run_name = f"{model_name}__r{args.lora_r}__lr{args.lr}__train"
     
     # Final directory structure: experiments/model_name/YYYYMMDD_HHMMSS_parameters
-    run_dir = os.path.join(base_dir, model_name, args.method, f"{timestamp}_{run_name}")
+    run_dir = os.path.join(base_dir, model_name, f"{timestamp}_{run_name}")
     
     # Create directories
     os.makedirs(run_dir, exist_ok=True)
@@ -100,11 +100,11 @@ def finetune():
     eff_lr = args.lr/(args.warmup_ratio * total_training_steps)
 
 
-    named_grads = estimate_and_process_grads_torch_2(
+    named_grads = estimate_and_process_grads_torch_3(
         model=model,
         dataloader=train_loader,
         lr=eff_lr,
-        num_samples=2,
+        num_samples=170,
     )
 
     # Create peft model
@@ -215,7 +215,7 @@ if __name__ == "__main__":
     
     # Model arguments
     parser.add_argument("--model", type=str, default="meta-llama/Llama-3.1-8B", help="Model name")
-    parser.add_argument("--lora_r", type=int, default=32, help="LoRA R value")
+    parser.add_argument("--lora_r", type=int, default=96, help="LoRA R value")
     parser.add_argument("--lora_alpha", type=int, default=16, help="LoRA alpha value")
     parser.add_argument("--lora_dropout", type=float, default=0.05, help="LoRA dropout value")
     parser.add_argument('--train_on_inputs', action='store_true', help='Train on inputs')

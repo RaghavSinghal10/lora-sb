@@ -1,4 +1,5 @@
 experiments/
 wandb/
 **/__pycache__/
-data/commonsense/
+data/commonsense_real/
+.gitignore
