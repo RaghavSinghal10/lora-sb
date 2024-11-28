@@ -7,7 +7,7 @@
 Low-rank adapters have become a standard approach for efficiently fine-tuning large language models (LLMs), but they often fall short of achieving the performance of full fine-tuning. We propose a method, **LoRA Silver Bullet** or **LoRA-SB**, that approximates full fine-tuning within low-rank subspaces using a carefully designed initialization strategy. We theoretically demonstrate that the architecture of LoRA-XS — which inserts a trainable rxr matrix between B and A while keeping other matrices fixed — provides the precise conditions needed for this approximation. We leverage its constrained update space to achieve optimal scaling for high-rank gradient updates while removing the need for hyperparameter tuning. We prove that our initialization offers an optimal low-rank approximation of the initial gradient and preserves update directions throughout training. Extensive experiments across mathematical reasoning, commonsense reasoning, and language understanding tasks demonstrate that our approach exceeds the performance of standard LoRA while using **27-90x** fewer parameters, and comprehensively outperforms LoRA-XS. Our findings establish that it is possible to simulate full fine-tuning in low-rank subspaces, and achieve significant efficiency gains without sacrificing performance.
 
 
-![M3CoL Arch Image](assets/LoRA-SB.png)
+![LoRA-SB Image](assets/LoRA-SB.png)
 
 LoRA-XS reduces parameter count compared to LoRA by inserting a trainable *r × r* matrix *R* between *B* and *A*, while keeping other matrices fixed, leading to *W = W₀ + sBRA*. 
 Our method, LoRA-SB, leverages the same architecture. We find that updating *R* using its gradients *g^R* is equivalent to updating the full-finetuning matrix *W* with an equivalent gradient *g̃ₛв = sBg^RA*. 
