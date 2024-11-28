@@ -27,7 +27,7 @@ LoRA-SB is built on top of HuggingFace Transformers and PEFT libraries, making i
 from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM
 from utils.initialization_utils import find_and_initialize
-from utils.gradient utils import estimate_and_process_grads_torch
+from utils.gradient_utils import estimate_and_process_grads_torch
 
 model = AutoModelForCausalLM.from_pretrained(
         model_name, 
