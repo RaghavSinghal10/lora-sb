@@ -18,6 +18,7 @@ In essence, we simulate the **entire full fine-tuning process** optimally within
 We recommend using a Conda environment to run the Python scripts for this project. Follow these commands to set up the environment and install the required libraries:
 ```
 conda create -n lora-sb python=3.10
+conda activate lora-sb
 pip install -r requirements.txt
 ```
 
