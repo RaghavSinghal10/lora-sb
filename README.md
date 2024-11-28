@@ -11,9 +11,9 @@ Low-rank adapters have become a standard approach for efficiently fine-tuning la
 
 LoRA-XS reduces parameter count compared to LoRA by inserting a trainable *r × r* matrix *R* between *B* and *A*, while keeping other matrices fixed, leading to *W = W₀ + sBRA*. 
 
-Our method, LoRA-SB, leverages the same architecture. We find that updating *R* using its gradients *g^R* is equivalent to updating the full-finetuning matrix *W* with an equivalent gradient *g̃_SB = sBg^RA*. 
+Our method, LoRA-SB, leverages the same architecture. We find that updating *R* using its gradients *g^R* is equivalent to updating the full-finetuning matrix *W* with an equivalent gradient *g̃₍SB₎ = sBg^RA*. 
 
-We initialize *B*, *R*, and *A* such that the equivalent gradient *g̃_SB* optimally approximates the full fine-tuning gradient *g* in low rank subspaces **at each training step**.
+We initialize *B*, *R*, and *A* such that the equivalent gradient *g̃₍SB₎* optimally approximates the full fine-tuning gradient *g* in low rank subspaces **at each training step**.
 
 In essence, we simulate the **entire full fine-tuning process** optimally within low-rank subspaces by **utilizing only the initial gradient *g₁*** (shown in green) from full fine-tuning.
 
