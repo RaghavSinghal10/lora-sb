@@ -118,3 +118,20 @@ bash scripts/run_glue.sh
 ```
 
 This script fine-tunes a RoBERTa-large model on the GLUE benchmark datasets. You can adjust the ``TASKS`` parameter to target different datasets as needed.
+
+## Citation
+
+## Citation
+
+If you use our work, please cite our paper:
+
+```
+@misc{ponkshe2024initializationusingupdateapproximation,
+      title={Initialization using Update Approximation is a Silver Bullet for Extremely Efficient Low-Rank Fine-Tuning}, 
+      author={Kaustubh Ponkshe and Raghav Singhal and Eduard Gorbunov and Alexey Tumanov and Samuel Horvath and Praneeth Vepakomma},
+      year={2024},
+      eprint={2411.19557},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2411.19557}, 
+}
