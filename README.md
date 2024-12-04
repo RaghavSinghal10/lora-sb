@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ## Quickstart
 
-LoRA-SB is built on top of HuggingFace Transformers and PEFT libraries, making it incredibly easy to use. The following example demonstrates the minimal changes required to fine-tune a model using LoRA-SB.
+LoRA-SB is built on top of Hugging Face Transformers and PEFT libraries, making it incredibly easy to use. The following example demonstrates the minimal changes required to fine-tune a model using LoRA-SB.
 
 ```python
 from peft import LoraConfig, get_peft_model
